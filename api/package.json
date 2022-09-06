@@ -6,11 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "api": "nodemon server.js",
-    "dev": "concurrently 'npm run api' 'cd ../client && npm start'"
+    "dev": "nodemon server.js"
   },
   "devDependencies": {
-    "concurrently": "^7.3.0",
     "nodemon": "^2.0.19"
   },
   "dependencies": {
