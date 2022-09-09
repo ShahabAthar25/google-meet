@@ -1,11 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import Clock from "../conponents/Clock";
+import LogIn from "../conponents/LogIn";
 import logo from "../images/logo.png";
+import {
+  Bars4Icon,
+  Cog8ToothIcon,
+  FlagIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline/";
 
 export default function Home() {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
+  const { isAuthenticated, user } = useAuth0();
 
-  console.log(isAuthenticated);
+  console.log(user.picture);
 
   return (
     <div className="w-screen h-screen flex flex-col">
@@ -16,14 +23,24 @@ export default function Home() {
             Meet
           </h1>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center space-x-3">
           <Clock />
           {isAuthenticated ? (
-            <div>
-              <button>Log In</button>
+            <div className="flex items-center pl-3 space-x-10">
+              <div className="flex items-center space-x-6">
+                <QuestionMarkCircleIcon className="h-6 text-gray-600" />
+                <FlagIcon className="h-6 text-gray-600" />
+                <Cog8ToothIcon className="h-6 text-gray-600" />
+              </div>
+              <div className="flex items-center space-x-4">
+                <Bars4Icon className="h-6 text-gray-600" />
+                <img src={user.picture} alt="" className="h-8 rounded-full" />
+              </div>
             </div>
           ) : (
-            <div>Log In</div>
+            <div>
+              <LogIn />
+            </div>
           )}
         </div>
       </div>
