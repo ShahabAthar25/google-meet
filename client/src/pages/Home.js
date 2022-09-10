@@ -1,21 +1,59 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import Clock from "../conponents/Clock";
-import LogIn from "../conponents/LogIn";
-import logo from "../images/logo.png";
+import { useState } from "react";
 import {
   Bars4Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   Cog8ToothIcon,
   FlagIcon,
   PencilSquareIcon,
   QuestionMarkCircleIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/outline/";
-import { useState } from "react";
+import Clock from "../conponents/Clock";
+import LogIn from "../conponents/LogIn";
+import logo from "../images/logo.png";
+import { ReactComponent as ImageOne } from "../images/image1.svg";
+import { ReactComponent as ImageTwo } from "../images/image2.svg";
+import { ReactComponent as ImageThree } from "../images/image3.svg";
+import Card from "../conponents/Card";
 
 export default function Home() {
   const { isAuthenticated, user } = useAuth0();
 
   const [link, setLink] = useState("");
+  const [current, setCurrent] = useState(0);
+  const imageTotal = 3;
+
+  const data = [
+    {
+      image: ImageOne,
+      title: "Get a link that you can share",
+      description: "to get a link you can send to people you want to meet with",
+      pretext: true,
+    },
+    {
+      image: ImageTwo,
+      title: "Plan ahead",
+      description:
+        "to schedule meetings in Google Calendar and send invites to participants",
+      pretext: true,
+    },
+    {
+      image: ImageThree,
+      title: "Your meeting is safe",
+      description:
+        "No one can join a meeting unless invited or admitted by the host",
+    },
+  ];
+
+  const nextSlide = () => {
+    setCurrent(current === imageTotal - 1 ? 0 : current + 1);
+  };
+
+  const previousSlide = () => {
+    setCurrent(current === 0 ? imageTotal - 1 : current - 1);
+  };
 
   return (
     <div className="w-screen h-screen flex flex-col">
@@ -48,7 +86,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex-[90%] flex m-auto w-full">
-        <div className="flex-[50%] ml-24 flex flex-col justify-center">
+        <div className="flex-[40%] ml-24 flex flex-col justify-center">
           <div>
             <div className="text-[2.75rem] font-medium leading-[3.25rem] tracking-normal font-roboto text-gray-900 max-w-[500px]">
               <h1>Premium video meetings.</h1>
@@ -93,8 +131,34 @@ export default function Home() {
             about google meet
           </div>
         </div>
-        <div className="flex-[50%] flex items-center justify-center">
-          <h1>Right</h1>
+        <div className="flex-[60%] flex items-center justify-center">
+          <div className="flex items-center space-x-4">
+            <button
+              className="bg-transparent border-0 cursor-pointer"
+              onClick={() => previousSlide()}
+            >
+              <ChevronLeftIcon className="h-6" />
+            </button>
+
+            {data.map((slide, index) => {
+              return (
+                <Card
+                  key={index}
+                  index={index}
+                  current={current}
+                  slide={slide}
+                  Image={slide.image}
+                />
+              );
+            })}
+
+            <button
+              className="bg-transparent border-0 cursor-pointer"
+              onClick={() => nextSlide()}
+            >
+              <ChevronRightIcon className="h-6" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
