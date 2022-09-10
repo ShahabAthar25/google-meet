@@ -19,10 +19,10 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <div className="flex-[10%] flex items-center justify-between px-3 py-2">
+      <div className="flex-[10%] flex items-center justify-between px-4">
         <div className="flex">
-          <img src={logo} alt="logo" />
-          <h1 className="mt-1 text-[24px] leading-6 ml-1 text-gray-600 font-medium">
+          <img src={logo} alt="logo" className="h-10" />
+          <h1 className="mt-1 text-[22px] leading-6 ml-1 text-gray-600 font-medium">
             Meet
           </h1>
         </div>
@@ -59,7 +59,7 @@ export default function Home() {
               </p>
             </div>
             <div className="flex items-center space-x-7">
-              <button className="bg-blue-600 flex items-center rounded-lg px-3 py-3 border-0 text-white font-roboto font-semibold">
+              <button className="bg-blue-600 flex items-center rounded-lg px-3 py-3 border-0 text-white font-roboto">
                 <VideoCameraIcon className="h-6 text-white mr-4" />
                 New meeting
               </button>
@@ -68,7 +68,8 @@ export default function Home() {
                   <PencilSquareIcon className="h-6 text-gray-600" />
                   <input
                     type="text"
-                    className="bg-transparent border-none px-2 py-3 outline-none"
+                    className="bg-transparent border-none px-2 py-3 outline-none text-gray-800"
+                    placeholder="Enter a code or link"
                     value={link}
                     onChange={(e) => setLink(e.target.value)}
                   />
@@ -81,7 +82,7 @@ export default function Home() {
               </form>
             </div>
           </div>
-          <div className="border-[1px] border-gray-400 w-full my-8 max-w-xl"></div>
+          <div className="border-b-[1px] border-gray-300 w-full my-8 max-w-xl"></div>
           <div className="flex font-roboto">
             <a
               href="https://support.google.com/meet/?hl=en"
