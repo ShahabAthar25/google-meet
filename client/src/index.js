@@ -13,6 +13,8 @@ root.render(
       redirectUri={window.location.origin}
       audience="https://google-meet-api.com"
       scope="openid profile email"
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <App />
     </Auth0Provider>
