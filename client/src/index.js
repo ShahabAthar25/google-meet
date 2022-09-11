@@ -11,6 +11,8 @@ root.render(
       domain="dev-8271s11u.us.auth0.com"
       clientId="pq45l8gEVl2sS7NCvagP5RcE64CQBa7Q"
       redirectUri={window.location.origin}
+      audience="https://google-meet-api.com"
+      scope="openid profile email"
     >
       <App />
     </Auth0Provider>

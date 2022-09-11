@@ -17,13 +17,13 @@ import { ReactComponent as ImageOne } from "../images/image1.svg";
 import { ReactComponent as ImageTwo } from "../images/image2.svg";
 import { ReactComponent as ImageThree } from "../images/image3.svg";
 import Card from "../conponents/Card";
+import axios from "axios";
 
 export default function Home() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
   const [link, setLink] = useState("");
   const [current, setCurrent] = useState(0);
-  const imageTotal = 3;
 
   const data = [
     {
@@ -47,12 +47,29 @@ export default function Home() {
     },
   ];
 
+  const imageTotal = data.length;
+
   const nextSlide = () => {
     setCurrent(current === imageTotal - 1 ? 0 : current + 1);
   };
 
   const previousSlide = () => {
     setCurrent(current === 0 ? imageTotal - 1 : current - 1);
+  };
+
+  const callAPI = async () => {
+    const token = await getAccessTokenSilently();
+    console.log(token);
+    try {
+      const response = await axios.get("http://localhost:5000/protected", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -161,6 +178,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <button onClick={() => callAPI()}>Call API</button>
     </div>
   );
 }
