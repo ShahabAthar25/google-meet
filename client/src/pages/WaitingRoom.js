@@ -1,12 +1,32 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import logo from "../images/logo.png";
+import { useEffect, useRef, useState } from "react";
+import { MicrophoneIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 
 export default function WaitingRoom() {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
 
   const { isAuthenticated, user } = useAuth0();
+
+  const videoRef = useRef();
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: { width: 1920, height: 1080 },
+        audio: true,
+      })
+      .then((stream) => {
+        let video = videoRef.current;
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   if (!isAuthenticated) {
     return <h1>Loading...</h1>;
@@ -28,8 +48,29 @@ export default function WaitingRoom() {
           </div>
         </div>
       </div>
-      <div className="flex-[0.95] flex">
-        <h1>Body</h1>
+      <div className="flex-[0.95] flex items-center justify-center">
+        <div className="flex-[0.7] flex relative max-w-3xl max-h-fit">
+          <video ref={videoRef} className="rounded-xl shadow-xl" />
+          <div
+            className="absolute bottom-2 left-1/2 flex items-center space-x-8"
+            style={{ transform: "translate(-50%, 0)" }}
+          >
+            <div className="rounded-full border-2 border-white flex items-center justify-center">
+              <MicrophoneIcon className="text-white h-6 m-4 " />
+            </div>
+            <div className="rounded-full border-2 border-white flex items-center justify-center">
+              <VideoCameraIcon className="text-white h-6 m-4 " />
+            </div>
+          </div>
+        </div>
+        <div className="flex-[0.3] flex items-center justify-center flex-col space-y-4">
+          <h1 className="text-3xl text-gray-800">Ready to join?</h1>
+          <Link to={`/room/${query.get(`destination`)}`}>
+            <button className="px-7 py-4 shadow-xl bg-blue-600 rounded-full text-white">
+              Ask to join
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );

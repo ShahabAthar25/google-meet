@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Bars4Icon,
   ChevronLeftIcon,
@@ -23,6 +23,7 @@ export default function Home() {
 
   const [link, setLink] = useState("");
   const [current, setCurrent] = useState(0);
+  console.log(user);
 
   const data = [
     {
@@ -76,7 +77,11 @@ export default function Home() {
               </div>
               <div className="flex items-center space-x-4">
                 <Bars4Icon className="h-6 text-gray-600" />
-                <img src={user.picture} alt="" className="h-8 rounded-full" />
+                <img
+                  src={user.picture}
+                  alt="Img"
+                  className="h-8 rounded-full"
+                />
               </div>
             </div>
           ) : (
