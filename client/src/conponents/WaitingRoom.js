@@ -4,29 +4,11 @@ import logo from "../images/logo.png";
 import { useEffect, useRef, useState } from "react";
 import { MicrophoneIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 
-export default function WaitingRoom() {
+export default function WaitingRoom({ userVideo }) {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
 
   const { isAuthenticated, user } = useAuth0();
-
-  const videoRef = useRef();
-
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: { width: 1920, height: 1080 },
-        audio: true,
-      })
-      .then((stream) => {
-        let video = videoRef.current;
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   if (!isAuthenticated) {
     return <h1>Loading...</h1>;
@@ -50,7 +32,13 @@ export default function WaitingRoom() {
       </div>
       <div className="flex-[0.95] flex items-center justify-center">
         <div className="flex-[0.7] flex relative max-w-3xl max-h-fit">
-          <video ref={videoRef} className="rounded-xl shadow-xl" />
+          <video
+            ref={userVideo}
+            className="rounded-xl shadow-xl w-full"
+            autoPlay
+            playsInline
+            muted
+          />
           <div
             className="absolute bottom-2 left-1/2 flex items-center space-x-8"
             style={{ transform: "translate(-50%, 0)" }}

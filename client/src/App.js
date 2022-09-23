@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import WaitingRoom from "./pages/WaitingRoom";
+import Room from "./pages/Room";
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/waitingroom" element={<WaitingRoom />} />
+          <Route path="/:id" element={<Room />} />
         </Routes>
       </BrowserRouter>
     </div>
