@@ -26,19 +26,27 @@ app.use(morgan("common"));
 app.use(auth);
 app.use(getUser);
 
+const users = [];
+
 io.on("connection", (socket) => {
+  if (!users[socket.id]) {
+    users[socket.id] = socket.id;
+  }
+
   socket.emit("me", socket.id);
+  io.sockets.emit("allUsers", users);
 
   socket.on("disconnect", () => {
     socket.broadcast.emit(`User ${socket.id} has left the call`);
+    delete users[socket.id];
   });
 
-  socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-    io.to(userToCall).emit("calluser", { signal: signalData, from, name });
+  socket.on("callUser", ({ userToCall, signalData, from }) => {
+    io.to(userToCall).emit("callUser", { signal: signalData, from });
   });
 
-  socket.on("calluser", (data) => {
-    io.to(data.to).emit("callaccepted", data.signal);
+  socket.on("acceptCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
   });
 });
 
