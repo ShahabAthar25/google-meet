@@ -43,6 +43,14 @@ function Room() {
         .catch((error) => {
           console.error(error);
         });
+
+      socket.current.on("yourID", (id) => {
+        setYourID(id);
+      });
+
+      socket.current.on("allUsers", (users) => {
+        setUsers(users);
+      });
     };
 
     fetchData();
