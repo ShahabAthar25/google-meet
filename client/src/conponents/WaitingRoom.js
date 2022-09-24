@@ -1,18 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import logo from "../images/logo.png";
 import { useEffect, useRef, useState } from "react";
 import { MicrophoneIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 
 export default function WaitingRoom({ userVideo }) {
-  const useQuery = () => new URLSearchParams(useLocation().search);
-  let query = useQuery();
-
-  const { isAuthenticated, user } = useAuth0();
-
-  if (!isAuthenticated) {
-    return <h1>Loading...</h1>;
-  }
+  const { user } = useAuth0();
 
   return (
     <div className="flex flex-col w-screen min-h-screen">
@@ -53,11 +46,9 @@ export default function WaitingRoom({ userVideo }) {
         </div>
         <div className="flex-[0.3] flex items-center justify-center flex-col space-y-4">
           <h1 className="text-3xl text-gray-800">Ready to join?</h1>
-          <Link to={`/room/${query.get(`destination`)}`}>
-            <button className="px-7 py-4 shadow-xl bg-blue-600 rounded-full text-white">
-              Ask to join
-            </button>
-          </Link>
+          <button className="px-7 py-4 shadow-xl bg-blue-600 rounded-full text-white">
+            Ask to join
+          </button>
         </div>
       </div>
     </div>

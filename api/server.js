@@ -11,12 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(server);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -33,7 +28,7 @@ io.on("connection", (socket) => {
     users[socket.id] = socket.id;
   }
 
-  socket.emit("me", socket.id);
+  socket.emit("yourID", socket.id);
   io.sockets.emit("allUsers", users);
 
   socket.on("disconnect", () => {
