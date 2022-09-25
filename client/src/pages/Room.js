@@ -4,6 +4,7 @@ import Peer from "simple-peer";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import WaitingRoom from "../conponents/WaitingRoom";
+import MeetingRoom from "../conponents/MeetingRoom";
 
 function Room() {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -23,7 +24,7 @@ function Room() {
   useEffect(() => {
     const fetchData = async () => {
       const token = await getAccessTokenSilently();
-      socket.current = io.connect("/", {
+      socket.current = io("http://localhost:5000/", {
         extraHeaders: {
           authorization: `Bearer ${token}`,
         },
@@ -54,7 +55,7 @@ function Room() {
     };
 
     fetchData();
-  }, []);
+  }, [getAccessTokenSilently]);
 
   if (!isAuthenticated) {
     return <h1>Loading...</h1>;
@@ -62,7 +63,11 @@ function Room() {
 
   return (
     <div>
-      {true ? <WaitingRoom userVideo={userVideo} /> : <h1>Hello World</h1>}
+      {true ? (
+        <WaitingRoom userVideo={userVideo} />
+      ) : (
+        <MeetingRoom id={yourID} users={users} />
+      )}
     </div>
   );
 }
