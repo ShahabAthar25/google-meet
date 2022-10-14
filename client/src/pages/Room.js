@@ -9,52 +9,41 @@ import MeetingRoom from "../conponents/MeetingRoom";
 function Room() {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const [yourID, setYourID] = useState();
   const [users, setUsers] = useState([]);
-  const [stream, setStream] = useState("");
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState();
-  const [callAccepted, setCallAccepted] = useState(false);
 
-  const userVideo = useRef();
-  const partnerVideo = useRef();
+  console.log(users);
+
   const socket = useRef();
+  const userVideo = useRef();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const token = await getAccessTokenSilently();
-      socket.current = io("http://localhost:5000/", {
-        extraHeaders: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
+    const connectToIO = async () => {
       navigator.mediaDevices
         .getUserMedia({
           video: { width: 1920, height: 1080 },
           audio: true,
         })
         .then((stream) => {
-          setStream(stream);
-          if (userVideo.current) {
-            userVideo.current.srcObject = stream;
-          }
+          userVideo.current.srcObject = stream;
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((e) => {
+          console.error(e);
         });
 
-      socket.current.on("yourID", (id) => {
-        setYourID(id);
+      socket.current = io.connect("ws://localhost:5000/", {
+        extraHeaders: {
+          authorization: `Bearer ${await getAccessTokenSilently()}`,
+        },
       });
-
-      socket.current.on("allUsers", (users) => {
+      socket.current.emit("join room", 1234567890);
+      socket.current.on("room full", () => console.log("Room is full"));
+      socket.current.on("all users", (users) => {
         setUsers(users);
+        console.log(users);
       });
     };
 
-    fetchData();
+    connectToIO();
   }, [getAccessTokenSilently]);
 
   if (!isAuthenticated) {
@@ -66,7 +55,7 @@ function Room() {
       {true ? (
         <WaitingRoom userVideo={userVideo} />
       ) : (
-        <MeetingRoom id={yourID} users={users} />
+        <MeetingRoom userVideo={userVideo} />
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function MeetingRoom({ id, users, stream }) {
+export default function MeetingRoom({ userVideo }) {
   return <div>Room</div>;
 }
